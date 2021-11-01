@@ -1,0 +1,14 @@
+{
+
+  "name": "Машина 1",
+  "country": "Германия",
+  "date_end": "2020-06-10T23:59:59+03:00",
+  "description": "description 1",
+  "id": "25",
+  "image": "image_1",
+  "price_new": 50,
+  "price_old": 100,
+  "quantity_unit": "шт",
+  "mark": "Mercedes-Benz",
+  "model": "GLE"
+}

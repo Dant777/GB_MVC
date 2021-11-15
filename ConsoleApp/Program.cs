@@ -1,38 +1,45 @@
-﻿using System;
+﻿using ConsoleApp.Factories.StrategyPattern;
+using ConsoleApp.Fastories.StrategyPattern;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using ConsoleApp.Entities;
-using ConsoleApp.FacadeObj;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using Autofac;
+using ConsoleApp.Factories;
+using ConsoleApp.Factories.StrategyPattern.Interfaces;
 
 namespace ConsoleApp
 {
-    //Придумайте небольшое приложение консольного типа, который берет различные Json структуры (предположительно из разных веб сервисов),
-    //олицетворяюющие товар в магазинах. Структуры не похожи друг на друга, но вам нужно их учесть, сделать универсально. Структуры на ваше усмотрение.
+    /*
+     *Используйте предыдущее домашнее задание с эмулятором сканера и
+     * по максимуму переведите его на Autofac используя встроенный
+     * функционал паттернов и внедрения зависимостей.
+     */
     class Program
     {
         static void Main(string[] args)
         {
-            //Паттерн прототип
-            string path = @"JsonData/jsonData_1.json";
-            List<string> listPath = new List<string>() {@"JsonData/jsonData_2.json", @"JsonData/jsonData_3.json"};
-
-            DBClass db = new DBClass();
-            AggregateJsonProduct aggregate = new AggregateJsonProduct();
-
-            Facade facade = new Facade(aggregate, db);
-            facade.AddInDB(path);
-            facade.AddInDB(listPath);
-
-            foreach (var work in db.WorkEntitiesList)
-            {
-                Console.WriteLine(work.Name);
-                Console.WriteLine("--------------------------");
-            }
+            ScannerRun();
 
             Console.ReadKey();
+        }
+
+
+        private static void ScannerRun()
+        {
+            //ScannerDevice scannerDevice = new ScannerDevice();
+            //PdfScanOutputStrategy pdfScanOutput = new PdfScanOutputStrategy();
+            //ImageScanOutputStrategy imageScan = new ImageScanOutputStrategy();
+            //ScannerLogger logger = new ScannerLogger();
+            //DeviceVisitor visitor = new DeviceVisitor();
+
+            DIContainer diContainer = new DIContainer();
+
+            ScannerContext scannerContext = new ScannerContext(
+                diContainer.GetContainer.Resolve<IScannerDevice>(),
+                diContainer.GetContainer.Resolve<IScannerLogger>(),
+                diContainer.GetContainer.Resolve<IMonitorVisitor>());
+
+            scannerContext.SetupOutputScanStrategy(diContainer.GetContainer.Resolve<IScanOutputStrategy>());
+            scannerContext.Execute(@"scanText.txt");
         }
     }
 }

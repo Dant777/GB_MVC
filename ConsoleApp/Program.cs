@@ -1,45 +1,58 @@
-﻿using ConsoleApp.Factories.StrategyPattern;
-using ConsoleApp.Fastories.StrategyPattern;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Autofac;
-using ConsoleApp.Factories;
-using ConsoleApp.Factories.StrategyPattern.Interfaces;
+using System.Linq;
+
 
 namespace ConsoleApp
 {
-    /*
-     *Используйте предыдущее домашнее задание с эмулятором сканера и
-     * по максимуму переведите его на Autofac используя встроенный
-     * функционал паттернов и внедрения зависимостей.
-     */
     class Program
     {
         static void Main(string[] args)
         {
-            ScannerRun();
+            ObjectInfo objectInfo = new ObjectInfo()
+            {
+                Name = "Name#1",
+                StartDate = DateTime.Now,
+                Employees = new List<Employee>()
+                {
+                    new Employee()
+                    {
+                        Name = "Employee name 1",
+                        Position = "Employee Position 1"
+                    },
+                    new Employee()
+                    {
+                        Name = "Employee name 2",
+                        Position = "Employee Position 2"
+                    },
+                    new Employee()
+                    {
+                        Name = "Employee name 3",
+                        Position = "Employee Position 3"
+                    }
+                },
+                Works = new List<Work>()
+                {
+                    new Work()
+                    {
+                        Name = "Work name 1",
+                        Value = 111
+                    },
+                    new Work()
+                    {
+                        Name = "Work name 2",
+                        Value = 222
+                    },new Work()
+                    {
+                        Name = "Work name 3",
+                        Value = 333
+                    },
+                }
+            };
 
-            Console.ReadKey();
-        }
+            ReportService reportService = new ReportService();
 
-
-        private static void ScannerRun()
-        {
-            //ScannerDevice scannerDevice = new ScannerDevice();
-            //PdfScanOutputStrategy pdfScanOutput = new PdfScanOutputStrategy();
-            //ImageScanOutputStrategy imageScan = new ImageScanOutputStrategy();
-            //ScannerLogger logger = new ScannerLogger();
-            //DeviceVisitor visitor = new DeviceVisitor();
-
-            DIContainer diContainer = new DIContainer();
-
-            ScannerContext scannerContext = new ScannerContext(
-                diContainer.GetContainer.Resolve<IScannerDevice>(),
-                diContainer.GetContainer.Resolve<IScannerLogger>(),
-                diContainer.GetContainer.Resolve<IMonitorVisitor>());
-
-            scannerContext.SetupOutputScanStrategy(diContainer.GetContainer.Resolve<IScanOutputStrategy>());
-            scannerContext.Execute(@"scanText.txt");
+            reportService.GenerateReport(objectInfo);
         }
     }
 }
